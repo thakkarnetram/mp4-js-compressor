@@ -28,7 +28,7 @@ export default function UploadCard() {
         formData.append("video", file);
 
         try {
-            const res = await axios.post("http://localhost:4000/compress", formData, {
+            const res = await axios.post("http://localhost:8082/api/v1/compress", formData, {
                 responseType: "blob",
                 onUploadProgress: (e) => {
                     const percent = Math.round((e.loaded * 100) / e.total);
@@ -39,6 +39,7 @@ export default function UploadCard() {
             const url = URL.createObjectURL(new Blob([res.data]));
             setCompressedUrl(url);
         } catch (err) {
+            console.log(err)
             alert("Compression failed.");
         } finally {
             setLoading(false);
