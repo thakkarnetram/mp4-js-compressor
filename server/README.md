@@ -1,4 +1,4 @@
-# 🎬 MP4 Bulk Compressor
+# 🎬 MP4 Bulk Compressor - API
 
 A  Node.js tool to **compress bulk MP4 files locally** with decent quality and reduced size — 
 faster and more private than online sites.
@@ -6,9 +6,7 @@ faster and more private than online sites.
 ---
 
 - Bulk MP4 compression
-- 20–50% smaller files with minimal quality loss
-- Runs fully offline
-- Adjustable quality using `-crf`  
+- API for the main site `/api/v1/compress`
 
 ---
 

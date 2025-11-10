@@ -1,0 +1,21 @@
+{
+  "name": "mp4-compressor",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "private": true,
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "express": "^5.1.0",
+    "fluent-ffmpeg": "^2.1.3",
+    "inquirer": "^12.10.0",
+    "ora": "^9.0.0"
+  }
+}
