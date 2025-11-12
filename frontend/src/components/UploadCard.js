@@ -8,6 +8,7 @@ export default function UploadCard() {
     const [compressedUrl, setCompressedUrl] = useState("");
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [crf, setCrf] = useState(24); // default CRF value
 
     const onDrop = useCallback((acceptedFiles) => {
         setFile(acceptedFiles[0]);
@@ -26,6 +27,7 @@ export default function UploadCard() {
 
         const formData = new FormData();
         formData.append("video", file);
+        formData.append("crf", crf);
 
         try {
             const res = await axios.post("http://localhost:8082/api/v1/compress", formData, {
@@ -82,6 +84,22 @@ export default function UploadCard() {
 
             {file && (
                 <>
+                    <div style={{ marginTop: 25 }}>
+                        <label htmlFor="crfRange">Quality (CRF): {crf}</label>
+                        <input
+                            id="crfRange"
+                            type="range"
+                            min="18"
+                            max="30"
+                            value={crf}
+                            onChange={(e) => setCrf(Number(e.target.value))}
+                            style={{ width: "100%", marginTop: 10 }}
+                        />
+                        <small>
+                            Lower CRF = better quality, larger file | Higher CRF = smaller file
+                        </small>
+                    </div>
+
                     <div style={{ marginTop: 20 }}>
                         <button onClick={handleCompress} disabled={loading}>
                             {loading ? "Compressing..." : "Compress"}

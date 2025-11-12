@@ -11,13 +11,13 @@ ffmpeg.setFfmpegPath(ffmpegInstaller.path);
  * @param {string} outputPath - Path to save compressed video.
  * @returns {Promise<void>}
  */
-export const compressVideo = (inputPath, outputPath) => {
+export const compressVideo = (inputPath, outputPath,crf) => {
     return new Promise((resolve, reject) => {
         ffmpeg(inputPath)
             .outputOptions([
                 "-vcodec libx264",
                 "-acodec copy",
-                "-crf 24",
+                `-crf ${crf}`,
                 "-preset medium",
                 "-movflags +faststart",
             ])

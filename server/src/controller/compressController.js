@@ -11,9 +11,10 @@ const compressVideoController = async (req,res) => {
         if(!req.file) {
             return res.status(400).json({message:"No file uploaded"})
         }
+        const crf = req.body.crf || 24;
         const inputPath =  req.file.path;
         const outputPath = path.join("compressed",`${Date.now()}-${req.file.originalname}`)
-        await compressVideo(inputPath,outputPath);
+        await compressVideo(inputPath,outputPath,crf);
 
         res.download(outputPath,(err) => {
             fs.unlinkSync(inputPath);
