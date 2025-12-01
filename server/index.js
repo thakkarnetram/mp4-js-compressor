@@ -1,30 +1,30 @@
-// This script can compress mp4 files to a decent quality in less size
-// useful for bulk compression of files
-// better than compression sites
-
-// -crf 21 use the int value to toggle quality of compression
-// lower the number higher the quality and file size
-// higher the number lower the quality and file size
-
 import express from "express";
 import cors from "cors";
-import bodyParser from "body-parser";
 import ffmpeg from "fluent-ffmpeg";
 import ffmpegInstaller from "@ffmpeg-installer/ffmpeg";
-import {compressRouter} from "./src/routes/compressRouter.js";
-import multer from "multer";
+import { compressRouterVideo } from "./src/routes/compressRouterVideo.js";
+import { compressRouterImage } from "./src/routes/compressRouterImage.js";
 
-const upload =  multer({dest:"uploads/"})
-// set the path for ffmpeg
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 
 const app = express();
-app.use(bodyParser.json());
-app.use(cors())
+app.use(cors());
+app.use(express.json());
 
-app.use("/api/v1",upload.single("video"),compressRouter);
+// mount routers (each router will apply its own multer)
+app.use("/api/v1/", compressRouterVideo);
+app.use("/api/v1/", compressRouterImage);
 
-app.listen(8082,() => {
-    console.log("Server Running ")
-})
+// simple ping
+app.get("/ping", (req, res) => res.send("ok"));
 
+// basic multer error handler
+app.use((err, req, res, next) => {
+    if (err && err.code === "LIMIT_UNEXPECTED_FILE") {
+        return res.status(400).json({ error: "Unexpected file field", details: err.message });
+    }
+    console.error(err);
+    res.status(500).json({ error: err?.message || "Internal server error" });
+});
+
+app.listen(8082, () => console.log("Server Running on :8082"));

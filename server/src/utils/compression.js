@@ -2,6 +2,7 @@
 
 import ffmpeg from "fluent-ffmpeg";
 import ffmpegInstaller from "@ffmpeg-installer/ffmpeg";
+import sharp from "sharp";
 
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 
@@ -33,3 +34,15 @@ export const compressVideo = (inputPath, outputPath,crf) => {
             .save(outputPath);
     });
 };
+
+
+export const compressImage = async (input,output,quality=80) => {
+    try {
+        await sharp(input)
+            .jpeg({quality})
+            .toFile(output);
+        console.log(`✅ Compressed image saved: ${output}`);
+    } catch (err) {
+        console.error("❌ Image compression failed:", err);
+    }
+}

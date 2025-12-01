@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "./components/Navbar";
 import Pricing from "./components/Pricing";
-import UploadCard from "./components/UploadCard";
+import UploadCard from "./components/UploadTabs";
 
 export default function App() {
     return (

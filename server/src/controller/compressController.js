@@ -1,8 +1,6 @@
-import express from "express";
-import multer from "multer"
 import fs from "fs";
 import path from "path";
-import {compressVideo} from "../utils/compression.js";
+import {compressVideo,compressImage} from "../utils/compression.js";
 
 if(!fs.existsSync("compressed")) fs.mkdirSync("compressed");
 
@@ -23,8 +21,25 @@ const compressVideoController = async (req,res) => {
         })
     } catch (err) {
         console.log(err)
-        return res.status(500).json({message:"Internal Server Error"})
+        return res.status(500).json({message:err})
     }
 }
 
-export {compressVideoController}
+const compressImageController = async (req,res) => {
+    try {
+        if (!req.file) return res.status(400).json({ message: "No image uploaded" });
+        const inputPath = req.file.path;
+        const outputPath = `${req.file.originalname}`
+        await compressImage(inputPath, outputPath, 70);
+
+        res.download(outputPath, (err) => {
+            fs.unlinkSync(inputPath);
+            fs.unlinkSync(outputPath);
+            if (err) console.log("Error sending image:", err);
+        });
+    } catch (err) {
+        return res.status(500).json({message:err})
+    }
+}
+
+export {compressVideoController,compressImageController}

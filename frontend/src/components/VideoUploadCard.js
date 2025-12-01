@@ -1,14 +1,15 @@
+// src/components/VideoUploadCard.js
 import React, { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import { motion } from "framer-motion";
 
-export default function UploadCard() {
+export default function VideoUploadCard() {
     const [file, setFile] = useState(null);
     const [compressedUrl, setCompressedUrl] = useState("");
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
-    const [crf, setCrf] = useState(24); // default CRF value
+    const [crf, setCrf] = useState(24);
 
     const onDrop = useCallback((acceptedFiles) => {
         setFile(acceptedFiles[0]);
@@ -30,19 +31,20 @@ export default function UploadCard() {
         formData.append("crf", crf);
 
         try {
-            const res = await axios.post("http://localhost:8082/api/v1/compress", formData, {
+            const res = await axios.post("http://localhost:8082/api/v1/compress/video", formData, {
                 responseType: "blob",
                 onUploadProgress: (e) => {
                     const percent = Math.round((e.loaded * 100) / e.total);
                     setProgress(percent);
                 },
+                timeout: 0, // large uploads can take long
             });
 
             const url = URL.createObjectURL(new Blob([res.data]));
             setCompressedUrl(url);
         } catch (err) {
-            console.log(err)
-            alert("Compression failed.");
+            console.error("Video compress error:", err);
+            alert("Compression failed. Check server logs.");
         } finally {
             setLoading(false);
         }
@@ -50,7 +52,7 @@ export default function UploadCard() {
 
     return (
         <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
+            initial={{ scale: 0.98, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             className="upload-card"
             style={{
@@ -58,14 +60,13 @@ export default function UploadCard() {
                 borderRadius: 16,
                 padding: 30,
                 textAlign: "center",
-                marginTop: 30,
             }}
         >
             <div
                 {...getRootProps()}
                 style={{
                     border: "2px dashed #475569",
-                    padding: 40,
+                    padding: 30,
                     borderRadius: 12,
                     cursor: "pointer",
                     background: isDragActive ? "#334155" : "transparent",
@@ -84,7 +85,7 @@ export default function UploadCard() {
 
             {file && (
                 <>
-                    <div style={{ marginTop: 25 }}>
+                    <div style={{ marginTop: 18 }}>
                         <label htmlFor="crfRange">Quality (CRF): {crf}</label>
                         <input
                             id="crfRange"
@@ -93,29 +94,23 @@ export default function UploadCard() {
                             max="30"
                             value={crf}
                             onChange={(e) => setCrf(Number(e.target.value))}
-                            style={{ width: "100%", marginTop: 10 }}
+                            style={{ width: "100%", marginTop: 8 }}
                         />
-                        <small>
-                            Lower CRF = better quality, larger file | Higher CRF = smaller file
+                        <small className="text-slate-400">
+                            Lower CRF = better quality, larger file
                         </small>
                     </div>
 
-                    <div style={{ marginTop: 20 }}>
+                    <div style={{ marginTop: 16 }}>
                         <button onClick={handleCompress} disabled={loading}>
-                            {loading ? "Compressing..." : "Compress"}
+                            {loading ? `Compressing ${progress}%` : "Compress Video"}
                         </button>
                     </div>
 
-                    {loading && (
-                        <div style={{ marginTop: 10 }}>
-                            <p>{progress}%</p>
-                        </div>
-                    )}
-
                     {compressedUrl && (
-                        <div style={{ marginTop: 20 }}>
+                        <div style={{ marginTop: 16 }}>
                             <a href={compressedUrl} download={`compressed-${file.name}`}>
-                                <button>⬇️ Download Compressed File</button>
+                                <button>⬇️ Download Compressed Video</button>
                             </a>
                         </div>
                     )}
