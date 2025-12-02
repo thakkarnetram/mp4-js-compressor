@@ -7,13 +7,14 @@ export default function Navbar() {
     const links = [
         { name: "Home", href: "#" },
         { name: "Pricing", href: "#pricing" },
+        { name: "FAQ", href: "#faq" },
     ];
 
     return (
         <nav className="bg-slate-900 text-white px-6 py-4 flex justify-between items-center shadow-md">
 
             <div className="text-2xl font-semibold tracking-tight text-blue-400">
-                TinyMP4
+                TinyCompression
             </div>
 
             <div className="hidden md:flex gap-8 text-sm font-medium">

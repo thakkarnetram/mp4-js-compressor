@@ -31,7 +31,7 @@ export default function Pricing() {
     return (
         <section id="pricing" className="bg-slate-900 text-white py-16 px-6">
             <h2 className="text-3xl font-semibold text-center mb-12">
-                Simple Pricing
+                Pricing
             </h2>
 
             {/* Adjust grid to 1 col on mobile, 2 on desktop */}
@@ -66,11 +66,6 @@ export default function Pricing() {
                     </div>
                 ))}
             </div>
-
-            {/* Note */}
-            <p className="text-center text-slate-400 text-sm mt-10">
-                Agency plan coming soon for teams & studios.
-            </p>
         </section>
     );
 }

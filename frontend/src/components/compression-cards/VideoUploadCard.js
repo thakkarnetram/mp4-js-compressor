@@ -1,4 +1,3 @@
-// src/components/VideoUploadCard.js
 import React, { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
@@ -10,21 +9,53 @@ export default function VideoUploadCard() {
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
     const [crf, setCrf] = useState(24);
+    const [validationMsg, setValidationMsg] = useState("");
 
-    const onDrop = useCallback((acceptedFiles) => {
-        setFile(acceptedFiles[0]);
+    // const MAX_SIZE = 1024 * 1024 * 1024;
+
+    const onDropAccepted = useCallback((acceptedFiles) => {
+        setValidationMsg("");
+        const f = acceptedFiles[0];
+        setFile(f);
         setCompressedUrl("");
     }, []);
 
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop,
-        accept: { "video/mp4": [".mp4"] },
-    });
+    const onDropRejected = useCallback((fileRejections) => {
+        if (!fileRejections || fileRejections.length === 0) {
+            setValidationMsg("File rejected.");
+            return;
+        }
+        const first = fileRejections[0];
+        let msg = "File not accepted.";
+        if (first.errors && first.errors.length > 0) {
+            const err = first.errors[0];
+            if (err.code === "file-invalid-type") {
+                msg = "Only MP4 videos are allowed.";
+            } else {
+                msg = err.message || "File not accepted.";
+            }
+        }
+        setValidationMsg(msg);
+    }, []);
+
+    const { getRootProps, getInputProps, isDragActive, isDragReject } =
+        useDropzone({
+            onDropAccepted,
+            onDropRejected,
+            accept: { "video/mp4": [".mp4"] },
+            maxFiles: 1,
+            multiple: false,
+            // maxSize: MAX_SIZE,
+        });
 
     const handleCompress = async () => {
-        if (!file) return;
+        if (!file) {
+            setValidationMsg("Please choose an MP4 video first.");
+            return;
+        }
         setLoading(true);
         setProgress(0);
+        setValidationMsg("");
 
         const formData = new FormData();
         formData.append("video", file);
@@ -37,14 +68,14 @@ export default function VideoUploadCard() {
                     const percent = Math.round((e.loaded * 100) / e.total);
                     setProgress(percent);
                 },
-                timeout: 0, // large uploads can take long
+                timeout: 0,
             });
 
             const url = URL.createObjectURL(new Blob([res.data]));
             setCompressedUrl(url);
         } catch (err) {
             console.error("Video compress error:", err);
-            alert("Compression failed. Check server logs.");
+            setValidationMsg("Compression failed. Check server logs.");
         } finally {
             setLoading(false);
         }
@@ -78,10 +109,27 @@ export default function VideoUploadCard() {
                         🎞️ {file.name} <br />
                         <small>({(file.size / 1024 / 1024).toFixed(2)} MB)</small>
                     </p>
+                ) : isDragReject ? (
+                    <p style={{ color: "#cbd5e1" }}>Unsupported file — only MP4 allowed.</p>
                 ) : (
-                    <p>Drag & drop or click to upload an MP4</p>
+                    <p>Drag & drop or click to upload an MP4 video</p>
                 )}
             </div>
+
+            {validationMsg && (
+                <div
+                    style={{
+                        marginTop: 12,
+                        background: "#111827",
+                        color: "#f8fafc",
+                        padding: "8px 12px",
+                        borderRadius: 8,
+                        border: "1px solid #374151",
+                    }}
+                >
+                    {validationMsg}
+                </div>
+            )}
 
             {file && (
                 <>
@@ -96,9 +144,7 @@ export default function VideoUploadCard() {
                             onChange={(e) => setCrf(Number(e.target.value))}
                             style={{ width: "100%", marginTop: 8 }}
                         />
-                        <small className="text-slate-400">
-                            Lower CRF = better quality, larger file
-                        </small>
+                        <small className="text-slate-400">Lower CRF = better quality, larger file</small>
                     </div>
 
                     <div style={{ marginTop: 16 }}>

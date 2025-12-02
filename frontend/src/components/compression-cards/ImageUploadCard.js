@@ -1,4 +1,3 @@
-// src/components/ImageUploadCard.js
 import React, { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
@@ -9,24 +8,57 @@ export default function ImageUploadCard() {
     const [resultUrl, setResultUrl] = useState("");
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
-    const [quality, setQuality] = useState(80); // 0-100
+    const [quality, setQuality] = useState(80);
+    const [validationMsg, setValidationMsg] = useState("");
 
-    const onDrop = useCallback((acceptedFiles) => {
-        setFile(acceptedFiles[0]);
+    const onDropAccepted = useCallback((acceptedFiles) => {
+        setValidationMsg("");
+        const f = acceptedFiles[0];
+        setFile(f);
         setResultUrl("");
     }, []);
 
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop,
-        accept: {
-            "image/*": [".jpg", ".jpeg", ".png", ".webp", ".avif"],
-        },
-    });
+    const onDropRejected = useCallback((fileRejections) => {
+        if (!fileRejections || fileRejections.length === 0) {
+            setValidationMsg("File rejected.");
+            return;
+        }
+        const first = fileRejections[0];
+        let msg = "File not accepted.";
+        if (first.errors && first.errors.length > 0) {
+            const err = first.errors[0];
+            if (err.code === "file-invalid-type") {
+                msg = "Only PNG and JPG/JPEG images are allowed.";
+            } else if (err.code === "file-too-large") {
+                msg = "File too large.";
+            } else {
+                msg = err.message || "File not accepted.";
+            }
+        }
+        setValidationMsg(msg);
+    }, []);
+
+    const { getRootProps, getInputProps, isDragActive, isDragReject } =
+        useDropzone({
+            onDropAccepted,
+            onDropRejected,
+            accept: {
+                "image/png": [".png"],
+                "image/jpeg": [".jpg", ".jpeg"],
+            },
+            maxFiles: 1,
+            multiple: false,
+            maxSize: 20 * 1024 * 1024,
+        });
 
     const handleCompress = async () => {
-        if (!file) return;
+        if (!file) {
+            setValidationMsg("Please choose a PNG or JPG image first.");
+            return;
+        }
         setLoading(true);
         setProgress(0);
+        setValidationMsg("");
 
         const formData = new FormData();
         formData.append("image", file);
@@ -36,13 +68,14 @@ export default function ImageUploadCard() {
             const res = await axios.post("http://localhost:8082/api/v1/compress/image", formData, {
                 responseType: "blob",
                 onUploadProgress: (e) => setProgress(Math.round((e.loaded * 100) / e.total)),
+                timeout: 0,
             });
 
             const url = URL.createObjectURL(new Blob([res.data]));
             setResultUrl(url);
         } catch (err) {
             console.error("Image compress error:", err);
-            alert("Image compression failed. Check server logs.");
+            setValidationMsg("Compression failed. Check server logs.");
         } finally {
             setLoading(false);
         }
@@ -76,10 +109,29 @@ export default function ImageUploadCard() {
                         🖼️ {file.name} <br />
                         <small>({(file.size / 1024).toFixed(2)} KB)</small>
                     </p>
+                ) : isDragReject ? (
+                    <p style={{ color: "#cbd5e1" }}>
+                        Unsupported file — only PNG / JPG allowed.
+                    </p>
                 ) : (
-                    <p>Drag & drop or click to upload an image</p>
+                    <p>Drag & drop or click to upload a PNG / JPG image</p>
                 )}
             </div>
+
+            {validationMsg && (
+                <div
+                    style={{
+                        marginTop: 12,
+                        background: "#111827",
+                        color: "#f8fafc",
+                        padding: "8px 12px",
+                        borderRadius: 8,
+                        border: "1px solid #374151",
+                    }}
+                >
+                    {validationMsg}
+                </div>
+            )}
 
             {file && (
                 <>
