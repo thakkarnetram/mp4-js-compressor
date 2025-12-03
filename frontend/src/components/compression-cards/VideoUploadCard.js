@@ -62,7 +62,7 @@ export default function VideoUploadCard() {
         formData.append("crf", crf);
 
         try {
-            const res = await axios.post("http://localhost:8082/api/v1/compress/video", formData, {
+            const res = await axios.post("http://192.168.1.43:8082/api/v1/compress/video", formData, {
                 responseType: "blob",
                 onUploadProgress: (e) => {
                     const percent = Math.round((e.loaded * 100) / e.total);

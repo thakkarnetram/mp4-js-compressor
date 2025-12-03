@@ -1,7 +1,7 @@
 // src/components/UploadTabs.js
 import React, { useState } from "react";
-import VideoUploadCard from "./VideoUploadCard";
-import ImageUploadCard from "./ImageUploadCard";
+import VideoUploadCard from "../components/compression-cards/VideoUploadCard";
+import ImageUploadCard from "../components/compression-cards/ImageUploadCard";
 
 export default function UploadTabs() {
     const [tab, setTab] = useState("video");

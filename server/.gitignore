@@ -1,2 +1,17 @@
+*.env
+config/secret.json
+# dependencies
 node_modules
-.idea
+
+/src/be-productive-dev-firebase-adminsdk-fbsvc-cea0a40335.json
+
+# testing
+coverage
+
+# production
+build
+
+# misc
+.DS_Store
+.env.prod.prod
+npm-debug.log

@@ -4,7 +4,10 @@ import ffmpeg from "fluent-ffmpeg";
 import ffmpegInstaller from "@ffmpeg-installer/ffmpeg";
 import { compressRouterVideo } from "./src/routes/compressRouterVideo.js";
 import { compressRouterImage } from "./src/routes/compressRouterImage.js";
+import {authRouter} from "./src/routes/authRouter.js";
+import {connectDatabase} from "./src/utils/mongoConnection.js";
 
+connectDatabase();
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 
 const app = express();
@@ -14,6 +17,7 @@ app.use(express.json());
 // mount routers (each router will apply its own multer)
 app.use("/api/v1/", compressRouterVideo);
 app.use("/api/v1/", compressRouterImage);
+app.use("/api/v1/auth", authRouter);
 
 // simple ping
 app.get("/ping", (req, res) => res.send("ok"));
