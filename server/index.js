@@ -6,6 +6,7 @@ import { compressRouterVideo } from "./src/routes/compressRouterVideo.js";
 import { compressRouterImage } from "./src/routes/compressRouterImage.js";
 import {authRouter} from "./src/routes/authRouter.js";
 import {connectDatabase} from "./src/utils/mongoConnection.js";
+import {paymentRouter} from "./src/routes/paymentRouter.js";
 
 connectDatabase();
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use("/api/v1/", compressRouterVideo);
 app.use("/api/v1/", compressRouterImage);
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/payments", paymentRouter);
 
 // simple ping
 app.get("/ping", (req, res) => res.send("ok"));

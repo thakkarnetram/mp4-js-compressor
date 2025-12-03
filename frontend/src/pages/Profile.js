@@ -9,9 +9,6 @@ export default function Profile() {
         .slice(0, 2)
         .toUpperCase();
 
-    const createdAt = user?.createdAt
-        ? new Date(user.createdAt).toLocaleDateString()
-        : "—";
 
     const plan = user?.plan || "Free";
 

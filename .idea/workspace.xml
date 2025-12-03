@@ -6,21 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="8ce3e35d-0873-4d21-98bf-4569b1d12e26" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/public/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Navbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Navbar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/compression-cards/ImageUploadCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/compression-cards/ImageUploadCard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/compression-cards/UploadTabs.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/UploadTabs.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/compression-cards/VideoUploadCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/compression-cards/VideoUploadCard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Pricing.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Pricing.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Profile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/server/.env.example" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/server/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/Mend-ezgif.com-video-to-gif-converter.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/Screenshot_2025-05-19-13-58-18-971.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/compressed-Screenshot_2025-05-19-13-58-18-971.jpeg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/server/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/instru_movement_mode.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/nuetral_position.gif" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/server/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package.json" afterDir="false" />
     </list>
@@ -89,7 +83,7 @@
       <updated>1764570391392</updated>
       <workItem from="1764570392723" duration="8105000" />
       <workItem from="1764649930487" duration="9831000" />
-      <workItem from="1764737879132" duration="7813000" />
+      <workItem from="1764737879132" duration="12483000" />
     </task>
     <servers />
   </component>
