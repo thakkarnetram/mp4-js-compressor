@@ -2,9 +2,9 @@ import React from "react";
 import { useAuth } from "../context/AuthContext";
 
 export default function Pricing() {
-    const { user, token } = useAuth();
+    const { user, token, setUserOnly } = useAuth();
 
-    const API_BASE ="http://localhost:8082";
+    const API_BASE = "http://localhost:8082";
     const RAZORPAY_KEY = process.env.REACT_APP_RAZOR_PAY_KEY;
 
     const plans = [
@@ -56,8 +56,13 @@ export default function Pricing() {
                     return;
                 }
 
+                // update context
+                if (data.user && typeof setUserOnly === "function") {
+                    setUserOnly(data.user);
+                } else {
+                    window.location.reload();
+                }
                 alert("Free plan activated!");
-                window.location.reload();
             } catch (err) {
                 console.error("activate-free error", err);
                 alert("Activation failed. Try again.");
@@ -132,8 +137,20 @@ export default function Pricing() {
                             return;
                         }
 
+                        // server should return { ok: true, message, user: updatedUser }
+                        if (verifyData.user) {
+                            // update AuthContext + localStorage so navbar/profile reflect new plan
+                            if (typeof setUserOnly === "function") {
+                                setUserOnly(verifyData.user);
+                            } else {
+                                // fallback: update localStorage and reload
+                                const raw = JSON.parse(localStorage.getItem("tc_auth") || "{}");
+                                localStorage.setItem("tc_auth", JSON.stringify({ ...raw, user: verifyData.user }));
+                                window.location.reload();
+                            }
+                        }
+
                         alert("Payment successful — plan updated!");
-                        window.location.reload();
                     } catch (err) {
                         console.error("verify error", err);
                         alert("Verification failed, contact support.");
@@ -161,9 +178,8 @@ export default function Pricing() {
                 {plans.map((plan, i) => (
                     <div
                         key={i}
-                        className={`p-8 rounded-2xl border transition-transform hover:scale-[1.03] ${
-                            plan.highlight ? "bg-blue-600 border-blue-500 shadow-lg shadow-blue-400/20" : "bg-slate-800 border-slate-700"
-                        }`}
+                        className={`p-8 rounded-2xl border transition-transform hover:scale-[1.03] ${plan.highlight ? "bg-blue-600 border-blue-500 shadow-lg shadow-blue-400/20" : "bg-slate-800 border-slate-700"
+                            }`}
                     >
                         <h3 className="text-2xl font-bold mb-2">{plan.title}</h3>
                         <p className="text-xl mb-6">{plan.price}</p>
@@ -175,9 +191,8 @@ export default function Pricing() {
 
                         <button
                             onClick={() => handleBuy(plan.id)}
-                            className={`w-full py-2 rounded-lg font-semibold ${
-                                plan.highlight ? "bg-white text-blue-600 hover:bg-slate-100" : "bg-blue-600 hover:bg-blue-500"
-                            }`}
+                            className={`w-full py-2 rounded-lg font-semibold ${plan.highlight ? "bg-white text-blue-600 hover:bg-slate-100" : "bg-blue-600 hover:bg-blue-500"
+                                }`}
                         >
                             {plan.amount === 0 ? "Activate Free" : "Choose Plan"}
                         </button>

@@ -3,12 +3,12 @@ import { useAuth } from "../context/AuthContext";
 
 export default function Profile() {
     const { user } = useAuth();
-
+    console.log(user)
     const initials = (user?.email || "U")
         .split("@")[0]
         .slice(0, 2)
         .toUpperCase();
-
+    console.log(user)
 
     const plan = user?.plan || "Free";
 
@@ -30,7 +30,7 @@ export default function Profile() {
 
                 <div className="text-center mb-4">
                     <span className="px-3 py-1 text-sm rounded-full bg-slate-900 border border-slate-700 text-blue-400">
-                        {plan} Member
+                        {plan.toUpperCase()} Member
                     </span>
                 </div>
 
