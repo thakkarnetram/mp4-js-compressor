@@ -92,6 +92,19 @@ export default function VideoUploadCard() {
     a.remove();
   };
 
+  async function parseErrorBody(data) {
+    try {
+      if (data && typeof data.text === "function") {
+        const txt = await data.text();
+        return JSON.parse(txt);
+      }
+      if (typeof data === "object") return data;
+      if (typeof data === "string") return JSON.parse(data);
+    } catch (e) {
+      return null;
+    }
+    return null;
+  }
 
   const uploadOne = async (it) => {
     const controller = new AbortController();
@@ -108,6 +121,7 @@ export default function VideoUploadCard() {
       const res = await axios.post(`${API_BASE}/api/v1/compress/video`, fd, {
         responseType: "blob",
         signal: controller.signal,
+        withCredentials: true,
         onUploadProgress: (e) => {
           if (!e.lengthComputable) return;
           const pct = Math.round((e.loaded * 100) / e.total);
@@ -123,6 +137,13 @@ export default function VideoUploadCard() {
         prev.map((x) => (x.id === it.id ? { ...x, status: "done", progress: 100, url, controller: null } : x))
       );
     } catch (err) {
+      if (err.response && err.response.status === 403) {
+        const parsed = await parseErrorBody(err.response.data);
+        if (parsed?.code === "ANON_LIMIT_EXCEEDED") {
+          setItems((prev) => prev.map((x) => (x.id === it.id ? { ...x, status: "blocked", controller: null } : x)));
+          return { ok: false, code: "ANON_LIMIT_EXCEEDED", message: parsed.message || "Anonymous daily limit reached." };
+        }
+      }
       if (axios.isCancel(err) || err?.name === "CanceledError") {
         setItems((prev) => prev.map((x) => (x.id === it.id ? { ...x, status: "cancelled", controller: null } : x)));
       } else {
@@ -142,21 +163,29 @@ export default function VideoUploadCard() {
     uploadingRef.current = true;
     setMsg("");
 
+    let stoppedDueToLimit = false;
 
     for (let i = 0; i < items.length; i++) {
       const id = items[i].id;
 
       const cur = items.find((x) => x.id === id);
       if (!cur) continue;
-      if (cur.status === "done") continue;
+      if (cur.status === "done" || cur.status === "blocked") continue;
       if (cur.status === "uploading") continue;
 
-      await uploadOne(cur);
+      const result = await uploadOne(cur);
+      if (!result?.ok && result?.code === "ANON_LIMIT_EXCEEDED") {
+        stoppedDueToLimit = true;
+        setMsg(result.message || "Anonymous daily limit reached. Please sign up to continue.");
+        break;
+      }
     }
-
     uploadingRef.current = false;
-    setMsg("Sequential uploads finished. Download each compressed file when ready.");
+    if (!stoppedDueToLimit) {
+      setMsg("Sequential uploads finished. Download each compressed file when ready.");
+    }
   };
+
 
 
   const uploadAllAndGetZip = async () => {
@@ -180,6 +209,7 @@ export default function VideoUploadCard() {
       const res = await axios.post(`${API_BASE}/api/v1/compress/video`, fd, {
         responseType: "blob",
         timeout: 0,
+        withCredentials: true,
         onUploadProgress: (e) => {
           if (!e.lengthComputable) return;
           const pct = Math.round((e.loaded * 100) / e.total);
@@ -207,6 +237,14 @@ export default function VideoUploadCard() {
         setItems((prev) => prev.map((it) => ({ ...it, status: "error" })));
       }
     } catch (err) {
+      if (err.response && err.response.status === 403) {
+        const parsed = await parseErrorBody(err.response.data);
+        if (parsed?.code === "ANON_LIMIT_EXCEEDED") {
+          setItems((prev) => prev.map((it) => ({ ...it, status: "blocked" })));
+          setMsg(parsed.message || "Anonymous daily limit reached. Please sign up.");
+          return;
+        }
+      }
       console.error("uploadAll error", err);
       setMsg("Upload or compression failed. Check server logs.");
       setItems((prev) => prev.map((it) => ({ ...it, status: "error", controller: null })));
@@ -295,6 +333,11 @@ export default function VideoUploadCard() {
                         {it.status === "done" && "Done"}
                         {it.status === "error" && "Error"}
                         {it.status === "cancelled" && "Cancelled"}
+                        {it.status === "blocked" && (
+                          <span style={{ color: "#ffb86b", fontWeight: 600 }}>
+                            Limit reached — sign up to continue
+                          </span>
+                        )}
                       </div>
 
                       <div style={{ display: "flex", gap: 8 }}>

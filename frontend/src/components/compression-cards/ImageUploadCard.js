@@ -51,6 +51,20 @@ export default function ImageUploadCard() {
             maxSize: 20 * 1024 * 1024,
         });
 
+    async function parseErrorBody(data) {
+        try {
+            if (data && typeof data.text === "function") {
+                const txt = await data.text();
+                return JSON.parse(txt);
+            }
+            if (typeof data === "object") return data;
+            if (typeof data === "string") return JSON.parse(data);
+        } catch (e) {
+            return null;
+        }
+        return null;
+    }
+
     const handleCompress = async () => {
         if (!file) {
             setValidationMsg("Please choose a PNG or JPG image first.");
@@ -67,6 +81,7 @@ export default function ImageUploadCard() {
         try {
             const res = await axios.post(`${API_BASE}/api/v1/compress/image`, formData, {
                 responseType: "blob",
+                withCredentials: true,
                 onUploadProgress: (e) => setProgress(Math.round((e.loaded * 100) / e.total)),
                 timeout: 0,
             });
@@ -74,6 +89,13 @@ export default function ImageUploadCard() {
             const url = URL.createObjectURL(new Blob([res.data]));
             setResultUrl(url);
         } catch (err) {
+            if (err.response && err.response.status === 403) {
+                const parsed = await parseErrorBody(err.response.data);
+                if (parsed?.code === "ANON_LIMIT_EXCEEDED") {
+                    setValidationMsg(parsed.message || "Daily limit reached. Please sign up to continue.");
+                    return;
+                }
+            }
             console.error("Image compress error:", err);
             setValidationMsg("Compression failed. Check server logs.");
         } finally {

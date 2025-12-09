@@ -7,28 +7,23 @@ import { compressRouterImage } from "./src/routes/compressRouterImage.js";
 import { authRouter } from "./src/routes/authRouter.js";
 import { connectDatabase } from "./src/utils/mongoConnection.js";
 import { paymentRouter } from "./src/routes/paymentRouter.js";
+import cookieParser from "cookie-parser";
 
 connectDatabase();
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 
 const app = express();
+app.use(cookieParser());
 const allowedOrigins = [
   "https://tinycompression.netlify.app",
-  "18.180.208.214",
-  "54.64.67.106",
-  "54.249.170.27",
-  "139.59.50.44",
-  "146.190.9.187",
-  "209.38.124.252",
-  "5.223.43.32",
-  "5.223.53.147",
-  "5.223.57.22",
+  "http://localhost:3000",
 ];
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   if (origin && allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
   }
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept');
