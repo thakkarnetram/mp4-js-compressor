@@ -13,7 +13,16 @@ ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 
 const app = express();
 const allowedOrigins = [
-  'https://tinycompression.netlify.app',
+  "https://tinycompression.netlify.app",
+  "18.180.208.214",
+  "54.64.67.106",
+  "54.249.170.27",
+  "139.59.50.44",
+  "146.190.9.187",
+  "209.38.124.252",
+  "5.223.43.32",
+  "5.223.53.147",
+  "5.223.57.22",
 ];
 
 app.use((req, res, next) => {
@@ -38,7 +47,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/payments", paymentRouter);
 
 // simple ping
-app.get("/ping", (req, res) => res.send("ok"));
+app.get("/", (req, res) => res.send("Server is up"));
 
 // basic multer error handler
 app.use((err, req, res, next) => {
