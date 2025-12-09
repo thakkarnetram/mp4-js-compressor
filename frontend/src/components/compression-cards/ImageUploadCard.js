@@ -10,7 +10,7 @@ export default function ImageUploadCard() {
     const [progress, setProgress] = useState(0);
     const [quality, setQuality] = useState(80);
     const [validationMsg, setValidationMsg] = useState("");
-
+    const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8082";
     const onDropAccepted = useCallback((acceptedFiles) => {
         setValidationMsg("");
         const f = acceptedFiles[0];
@@ -65,7 +65,7 @@ export default function ImageUploadCard() {
         formData.append("quality", quality);
 
         try {
-            const res = await axios.post("http://192.168.1.43:8082/api/v1/compress/image", formData, {
+            const res = await axios.post(`${API_BASE}/api/v1/compress/image`, formData, {
                 responseType: "blob",
                 onUploadProgress: (e) => setProgress(Math.round((e.loaded * 100) / e.total)),
                 timeout: 0,

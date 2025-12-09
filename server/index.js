@@ -12,24 +12,23 @@ connectDatabase();
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 
 const app = express();
-app.use(cors());
 const allowedOrigins = [
   'https://tinycompression.netlify.app',
 ];
-app.use(cors({
+const corsOptions = {
   origin: function(origin, callback){
-
-    if(!origin) return callback(null, true);
-    if(allowedOrigins.indexOf(origin) === -1){
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      return callback(new Error('Not allowed by CORS'), false);
     }
     return callback(null, true);
   },
   methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization','Accept'],
-  credentials: true 
-}));
+  credentials: false 
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json());
 
 // mount routers (each router will apply its own multer)
