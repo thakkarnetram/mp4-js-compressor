@@ -8,14 +8,14 @@ export default function VideoUploadCard() {
   const [crf, setCrf] = useState(24);
   const [msg, setMsg] = useState("");
   const uploadingRef = useRef(false);
-  const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:8082";
+  const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8082";
 
   const wrapFiles = (files) =>
     Array.from(files).map((file) => ({
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
       file,
       progress: 0,
-      status: "idle", 
+      status: "idle",
       url: null,
       controller: null,
     }));
@@ -53,13 +53,13 @@ export default function VideoUploadCard() {
         if (it.controller) {
           try {
             it.controller.abort();
-          } catch {}
+          } catch { }
         }
-        
+
         if (it.url) {
           try {
             URL.revokeObjectURL(it.url);
-          } catch {}
+          } catch { }
         }
         copy.splice(idx, 1);
       }
@@ -73,7 +73,7 @@ export default function VideoUploadCard() {
         if (it.id === id && it.controller) {
           try {
             it.controller.abort();
-          } catch {}
+          } catch { }
           return { ...it, status: "cancelled", controller: null };
         }
         return it;
@@ -116,7 +116,7 @@ export default function VideoUploadCard() {
         timeout: 0,
       });
 
-    
+
       const blob = res.data;
       const url = URL.createObjectURL(blob);
       setItems((prev) =>
@@ -132,7 +132,7 @@ export default function VideoUploadCard() {
     }
   };
 
- 
+
   const startSequentialUploads = async () => {
     if (uploadingRef.current) return;
     if (items.length === 0) {
@@ -173,7 +173,7 @@ export default function VideoUploadCard() {
     setItems((prev) => prev.map((it) => ({ ...it, status: "uploading", progress: 0 })));
 
     const fd = new FormData();
-    items.forEach((it) => fd.append("video", it.file)); 
+    items.forEach((it) => fd.append("video", it.file));
     fd.append("crf", String(crf));
 
     try {
@@ -389,12 +389,12 @@ export default function VideoUploadCard() {
                 if (f.controller) {
                   try {
                     f.controller.abort();
-                  } catch {}
+                  } catch { }
                 }
                 if (f.url) {
                   try {
                     URL.revokeObjectURL(f.url);
-                  } catch {}
+                  } catch { }
                 }
               });
               setItems([]);

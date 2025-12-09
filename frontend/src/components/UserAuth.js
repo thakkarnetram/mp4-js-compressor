@@ -9,6 +9,7 @@ export default function UserAuth() {
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
     const inputRefs = useRef([]);
+    const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8082";
 
     const handleSendOtp = async (e) => {
         e.preventDefault();
@@ -22,12 +23,12 @@ export default function UserAuth() {
 
         try {
             setLoading(true);
-            await fetch("http://localhost:8082/api/v1/auth/send-otp", {
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json"
+            await fetch(`${API_BASE}/api/v1/auth/send-otp`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
                 },
-                body:JSON.stringify({
+                body: JSON.stringify({
                     email
                 })
             });
@@ -83,11 +84,11 @@ export default function UserAuth() {
         try {
             setLoading(true);
             const res = await fetch("http://localhost:8082/api/v1/auth/verify-otp", {
-                method:"POST",
-                headers:{
-                 "Content-Type":"application/json"
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
                 },
-                body:JSON.stringify({
+                body: JSON.stringify({
                     email,
                     otp: code,
                 })
