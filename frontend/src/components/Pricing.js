@@ -13,7 +13,7 @@ export default function Pricing() {
             title: "Free",
             price: "₹0",
             amount: 0,
-            features: ["5 video at a time", "Max 200MB", "Basic compression settings"],
+            features: ["5 videos  ", "Max 200MB", "Basic compression settings"],
         },
         {
             id: "Pro",
