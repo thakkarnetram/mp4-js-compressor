@@ -12,15 +12,39 @@ ffmpeg.setFfmpegPath(ffmpegInstaller.path);
  * @param {string} outputPath - Path to save compressed video.
  * @returns {Promise<void>}
  */
-export const compressVideo = (inputPath, outputPath,crf) => {
+// This function with config uses heavy cpu 
+// export const compressVideo = (inputPath, outputPath,crf) => {
+//     return new Promise((resolve, reject) => {
+//         ffmpeg(inputPath)
+//             .outputOptions([
+//                 "-vcodec libx264",
+//                 "-acodec copy",
+//                 `-crf ${crf}`,
+//                 "-preset medium",
+//                 "-movflags +faststart",
+//             ])
+//             .on("end", () => {
+//                 console.log("✅ Compression successful:", outputPath);
+//                 resolve();
+//             })
+//             .on("error", (err, stdout, stderr) => {
+//                 console.error("❌ FFmpeg Error:", err.message);
+//                 console.error("FFmpeg stderr:", stderr);
+//                 reject(err);
+//             })
+//             .save(outputPath);
+//     });
+// };
+
+// configured for low cpu usage 
+export const compressVideo = (inputPath, outputPath, crf) => {
     return new Promise((resolve, reject) => {
         ffmpeg(inputPath)
             .outputOptions([
-                "-vcodec libx264",
-                "-acodec copy",
+                "-preset veryfast",
                 `-crf ${crf}`,
-                "-preset medium",
                 "-movflags +faststart",
+                "-threads 1"
             ])
             .on("end", () => {
                 console.log("✅ Compression successful:", outputPath);
@@ -36,10 +60,10 @@ export const compressVideo = (inputPath, outputPath,crf) => {
 };
 
 
-export const compressImage = async (input,output,quality=80) => {
+export const compressImage = async (input, output, quality = 80) => {
     try {
         await sharp(input)
-            .jpeg({quality})
+            .jpeg({ quality })
             .toFile(output);
         console.log(`✅ Compressed image saved: ${output}`);
     } catch (err) {
