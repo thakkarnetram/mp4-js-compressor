@@ -5,10 +5,10 @@ import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 
 export default function VideoUploadCard() {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const isLoggedIn = !!user;
   const isPro = user?.plan === "pro";
-
+  const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
   const [items, setItems] = useState([]);
   const [crf, setCrf] = useState(24);
   const [msg, setMsg] = useState("");
@@ -127,6 +127,9 @@ export default function VideoUploadCard() {
         responseType: "blob",
         signal: controller.signal,
         withCredentials: true,
+        headers: {
+          ...authHeader
+        },
         onUploadProgress: (e) => {
           if (!e.lengthComputable) return;
           const pct = Math.round((e.loaded * 100) / e.total);
@@ -218,6 +221,9 @@ export default function VideoUploadCard() {
         responseType: "blob",
         timeout: 0,
         withCredentials: true,
+        headers: {
+          ...authHeader
+        },
         onUploadProgress: (e) => {
           if (!e.lengthComputable) return;
           const pct = Math.round((e.loaded * 100) / e.total);
@@ -260,7 +266,6 @@ export default function VideoUploadCard() {
     }
   };
 
-  // --- small UI helper for free/anon CRF choices ---
   const FreeChoices = [18, 25, 30];
 
   return (
