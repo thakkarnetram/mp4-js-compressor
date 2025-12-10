@@ -5,8 +5,6 @@ const DEFAULT_LIMIT = Number(process.env.ANON_DAILY_LIMIT || 4);
 
 export async function enforceAnonLimit(req, res, next) {
     try {
-        console.log("[anonLimit] incoming:", { path: req.path, method: req.method, hasUser: !!req.user });
-        console.log(req.user)
         if (req.user && req.user.sub) return next();
         let filesCount = 0;
         if (Array.isArray(req.files) && req.files.length) filesCount = req.files.length;
