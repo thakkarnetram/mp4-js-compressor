@@ -22,3 +22,24 @@ export const requireAuth = (req, res, next) => {
         return res.status(401).json({ message: "Unauthorized: invalid token" });
     }
 };
+
+export const optionalAuth = (req, res, next) => {
+  try {
+    const auth = req.headers.authorization || req.headers.Authorization;
+    if (!auth) return next();
+
+    const parts = auth.split(" ");
+    if (parts.length !== 2 || parts[0] !== "Bearer") return next();
+
+    const token = parts[1];
+    try {
+      const payload = jwt.verify(token, process.env.SECRET_KEY);
+      req.user = payload;
+    } catch (err) {
+      console.warn("optionalAuth: invalid token:", err.message);
+    }
+  } catch (e) {
+    console.warn("optionalAuth: unexpected error", e);
+  }
+  return next();
+};

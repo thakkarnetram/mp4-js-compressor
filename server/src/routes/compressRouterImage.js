@@ -2,11 +2,11 @@ import express from "express";
 import multer from "multer";
 import { compressImageController } from "../controller/compressController.js";
 import { enforceAnonLimit } from "../middleware/anonLimit.js";
-import { requireAuth } from "../middleware/auth.js";
+import { optionalAuth } from "../middleware/auth.js";
 
 const router = express.Router();
 const upload = multer({ dest: '/tmp', limits: { fileSize: 1024 * 1024 * 1024 } });
 
-router.post("/compress/image", requireAuth, upload.single("image"), enforceAnonLimit, compressImageController);
+router.post("/compress/image", optionalAuth, upload.single("image"), enforceAnonLimit, compressImageController);
 
 export { router as compressRouterImage };
