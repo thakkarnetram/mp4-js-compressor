@@ -6,7 +6,7 @@ export default function Pricing() {
 
     const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8082";
     const RAZORPAY_KEY = process.env.REACT_APP_RAZOR_PAY_KEY;
-    const isProd = false;
+    const isProd = true;
     const plans = [
         {
             id: "Free",
