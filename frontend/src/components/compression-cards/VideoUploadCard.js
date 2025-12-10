@@ -2,8 +2,13 @@ import React, { useState, useCallback, useRef } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { useAuth } from "../../context/AuthContext";
 
 export default function VideoUploadCard() {
+  const { user } = useAuth();
+  const isLoggedIn = !!user;
+  const isPro = user?.plan === "pro";
+
   const [items, setItems] = useState([]);
   const [crf, setCrf] = useState(24);
   const [msg, setMsg] = useState("");
@@ -130,12 +135,12 @@ export default function VideoUploadCard() {
         timeout: 0,
       });
 
-
       const blob = res.data;
       const url = URL.createObjectURL(blob);
       setItems((prev) =>
         prev.map((x) => (x.id === it.id ? { ...x, status: "done", progress: 100, url, controller: null } : x))
       );
+      return { ok: true };
     } catch (err) {
       if (err.response && err.response.status === 403) {
         const parsed = await parseErrorBody(err.response.data);
@@ -146,13 +151,14 @@ export default function VideoUploadCard() {
       }
       if (axios.isCancel(err) || err?.name === "CanceledError") {
         setItems((prev) => prev.map((x) => (x.id === it.id ? { ...x, status: "cancelled", controller: null } : x)));
+        return { ok: false, code: "CANCELLED" };
       } else {
         console.error("upload error", err);
         setItems((prev) => prev.map((x) => (x.id === it.id ? { ...x, status: "error", controller: null } : x)));
+        return { ok: false, code: "ERROR", message: "Upload failed" };
       }
     }
   };
-
 
   const startSequentialUploads = async () => {
     if (uploadingRef.current) return;
@@ -186,8 +192,6 @@ export default function VideoUploadCard() {
     }
   };
 
-
-
   const uploadAllAndGetZip = async () => {
     if (uploadingRef.current) return;
     if (items.length === 0) {
@@ -195,9 +199,13 @@ export default function VideoUploadCard() {
       return;
     }
 
+    if (!(isLoggedIn && isPro)) {
+      setMsg("Batch ZIP export is available for Pro users only. Sign up or upgrade to Pro to use this feature.");
+      return;
+    }
+
     uploadingRef.current = true;
     setMsg("Uploading all files & compressing into ZIP...");
-
 
     setItems((prev) => prev.map((it) => ({ ...it, status: "uploading", progress: 0 })));
 
@@ -220,7 +228,6 @@ export default function VideoUploadCard() {
       const contentType = (res.headers && (res.headers["content-type"] || "")) || "";
       const blob = res.data;
       const blobUrl = URL.createObjectURL(blob);
-
 
       if (contentType.includes("zip") || blobUrl) {
         const a = document.createElement("a");
@@ -406,23 +413,33 @@ export default function VideoUploadCard() {
             {uploadingRef.current ? "Uploading..." : "Upload Sequentially (one-by-one)"}
           </button>
 
-          <button
-            onClick={uploadAllAndGetZip}
-            disabled={uploadingRef.current}
-            style={{
-              flex: 1,
-              padding: "10px 12px",
-              borderRadius: 10,
-              background: "#0b1622",
-              color: "#cde7ff",
-              border: "1px solid #173246",
-              fontWeight: 700,
-            }}
-            title="Upload all files in one request and get a single ZIP back"
-          >
-            {uploadingRef.current ? "Uploading & Preparing ZIP..." : "Upload & Download ZIP"}
-          </button>
+          {/* ZIP button only for logged-in Pro users */}
+          {(isLoggedIn && isPro) && (
+            <button
+              onClick={uploadAllAndGetZip}
+              disabled={uploadingRef.current}
+              style={{
+                flex: 1,
+                padding: "10px 12px",
+                borderRadius: 10,
+                background: "#0b1622",
+                color: "#cde7ff",
+                border: "1px solid #173246",
+                fontWeight: 700,
+              }}
+              title="Upload all files in one request and get a single ZIP back"
+            >
+              {uploadingRef.current ? "Uploading & Preparing ZIP..." : "Upload & Download ZIP"}
+            </button>
+          )}
         </div>
+
+        {/* explanatory note for users who don't have ZIP access */}
+        {!(isLoggedIn && isPro) && (
+          <div style={{ marginTop: 8, fontSize: 13, color: "#cbd5e1" }}>
+            {isLoggedIn ? "ZIP export is available for Pro users only." : "Sign up for Pro to enable batch ZIP export."}
+          </div>
+        )}
 
         <div style={{ marginTop: 10, display: "flex", justifyContent: "flex-end", gap: 10 }}>
           <button

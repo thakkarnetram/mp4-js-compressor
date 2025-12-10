@@ -6,21 +6,21 @@ export default function Pricing() {
 
     const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8082";
     const RAZORPAY_KEY = process.env.REACT_APP_RAZOR_PAY_KEY;
-
+    const isProd = false;
     const plans = [
         {
             id: "Free",
             title: "Free",
             price: "₹0",
             amount: 0,
-            features: ["5 videos  ", "Max 200MB", "Basic compression settings"],
+            features: ["4 videos", "Sequential file upload", "Basic compression settings"],
         },
         {
             id: "Pro",
             title: "Pro",
-            price: "₹199 / month",
-            amount: 199,
-            features: ["Bulk compression", "Custom CRF settings"],
+            price: "₹299 / month",
+            amount: 299,
+            features: ["Bulk compression with zip", "Custom CRF settings"],
             highlight: true,
         },
 
@@ -209,7 +209,7 @@ export default function Pricing() {
                             </ul>
 
                             <button
-                                onClick={() => handleBuy(plan.id)}
+                                onClick={() => { isProd ? handleBuy(plan.id) : alert("Payments are in Test Mode") }}
                                 className={`w-full py-2 rounded-lg font-semibold ${plan.highlight
                                     ? "bg-white text-blue-600 hover:bg-slate-100"
                                     : "bg-blue-600 hover:bg-blue-500"

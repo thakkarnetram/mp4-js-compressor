@@ -16,7 +16,7 @@ const razor = new Razorpay({
 
 const PLAN_PRICES = {
     free: 0,
-    pro: 199,
+    pro: 299,
 };
 
 export const createOrder = async (req, res) => {

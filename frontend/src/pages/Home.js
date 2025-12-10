@@ -5,7 +5,7 @@ import FAQ from "../components/FAQ";
 
 export default function Home() {
     return (
-        <div className="min-h-screen bg-slate-900 text-white">
+        <div className="min-h-screen bg-slate-900 text-white overflow-auto">
             <section id="upload" className="flex justify-center py-12">
                 <UploadCard />
             </section>
