@@ -439,7 +439,7 @@ export default function VideoUploadCard() {
         <small className="text-slate-100" style={{ display: "block", marginTop: 8 }}>
           Lower CRF = better quality, larger file.
           <div style={{ marginLeft: 12, color: "#b2b4b7ff", fontSize: 13 }}>
-            {isLoggedIn ? "Free plan — limited CRF choices" : "Anonymous — limited CRF choices"}
+            {isLoggedIn && !isPro ? "Free plan — limited CRF choices" : !isLoggedIn || !isPro ? "Anonymous — limited CRF choices" : ""}
           </div>
         </small>
 
