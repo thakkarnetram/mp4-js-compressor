@@ -260,6 +260,9 @@ export default function VideoUploadCard() {
     }
   };
 
+  // --- small UI helper for free/anon CRF choices ---
+  const FreeChoices = [18, 25, 30];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 6 }}
@@ -385,16 +388,60 @@ export default function VideoUploadCard() {
       )}
 
       <div style={{ marginTop: 12 }}>
-        <label style={{ display: "block", fontSize: 13, marginBottom: 6 }}>Quality (CRF): {crf}</label>
-        <input
-          type="range"
-          min="18"
-          max="30"
-          value={crf}
-          onChange={(e) => setCrf(Number(e.target.value))}
-          style={{ width: "100%" }}
-        />
-        <small className="text-slate-400">Lower CRF = better quality, larger file</small>
+        <label style={{ display: "block", fontSize: 13, marginBottom: 6 }}>
+          Quality (CRF):{" "}
+          <span style={{ color: "#cbd5e1", fontWeight: 600 }}>{crf}</span>
+        </label>
+
+        {/* Pro users: full slider */}
+        {isPro ? (
+          <>
+            <input
+              type="range"
+              min="18"
+              max="30"
+              value={crf}
+              onChange={(e) => setCrf(Number(e.target.value))}
+              style={{ width: "100%" }}
+            />
+            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6, color: "#9fb0c8", fontSize: 12 }}>
+              <div>Better quality</div>
+              <div>Smaller size</div>
+            </div>
+          </>
+        ) : (
+          <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: 'center' }}>
+            {FreeChoices.map((v) => {
+              const active = v === crf;
+              return (
+                <button
+                  key={v}
+                  onClick={() => setCrf(v)}
+                  aria-pressed={active}
+                  style={{
+                    padding: "8px 12px",
+                    borderRadius: 8,
+                    background: active ? "#2563eb" : "#071826",
+                    color: active ? "#fff" : "#9fb0c8",
+                    border: active ? "1px solid #1746c8" : "1px solid #173246",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  }}
+                >
+                  {v}
+                </button>
+              );
+            })}
+
+          </div>
+        )}
+
+        <small className="text-slate-100" style={{ display: "block", marginTop: 8 }}>
+          Lower CRF = better quality, larger file.
+          <div style={{ marginLeft: 12, color: "#b2b4b7ff", fontSize: 13 }}>
+            {isLoggedIn ? "Free plan — limited CRF choices" : "Anonymous — limited CRF choices"}
+          </div>
+        </small>
 
         <div style={{ marginTop: 10, display: "flex", gap: 10 }}>
           <button
@@ -413,7 +460,6 @@ export default function VideoUploadCard() {
             {uploadingRef.current ? "Uploading..." : "Upload Sequentially (one-by-one)"}
           </button>
 
-          {/* ZIP button only for logged-in Pro users */}
           {(isLoggedIn && isPro) && (
             <button
               onClick={uploadAllAndGetZip}
@@ -434,7 +480,6 @@ export default function VideoUploadCard() {
           )}
         </div>
 
-        {/* explanatory note for users who don't have ZIP access */}
         {!(isLoggedIn && isPro) && (
           <div style={{ marginTop: 8, fontSize: 13, color: "#cbd5e1" }}>
             {isLoggedIn ? "ZIP export is available for Pro users only." : "Sign up for Pro to enable batch ZIP export."}
@@ -444,7 +489,6 @@ export default function VideoUploadCard() {
         <div style={{ marginTop: 10, display: "flex", justifyContent: "flex-end", gap: 10 }}>
           <button
             onClick={() => {
-              // abort any ongoing uploads and clear list
               items.forEach((f) => {
                 if (f.controller) {
                   try {

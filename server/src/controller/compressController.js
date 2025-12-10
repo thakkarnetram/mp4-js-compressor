@@ -6,7 +6,7 @@ import pLimit from "p-limit"
 
 if(!fs.existsSync("compressed")) fs.mkdirSync("compressed");
 
-const CONCURRENCY = 2;
+const CONCURRENCY = 1;
 const compressVideoController = async (req, res) => {
     try {
         const crf = Number(req.body.crf) || 24;

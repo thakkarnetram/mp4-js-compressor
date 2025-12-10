@@ -13,14 +13,14 @@ export default function Pricing() {
             title: "Free",
             price: "₹0",
             amount: 0,
-            features: ["4 videos", "Sequential file upload", "Basic compression settings"],
+            features: ["4 videos", "Sequential file upload", "Limited CRF settings"],
         },
         {
             id: "Pro",
             title: "Pro",
             price: "₹299 / month",
             amount: 299,
-            features: ["Bulk compression with zip", "Custom CRF settings"],
+            features: ["Sequential file upload", "Bulk compression with zip", "Custom CRF settings"],
             highlight: true,
         },
 
