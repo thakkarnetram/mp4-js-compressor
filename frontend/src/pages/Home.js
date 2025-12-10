@@ -6,48 +6,33 @@ import FAQ from "../components/FAQ";
 export default function Home() {
     return (
         <div className="min-h-screen bg-slate-900 text-white">
-            <section className="px-6 md:px-24 lg:px-40 py-10 text-center text-slate-300">
-                <h2 className="text-2xl font-semibold mb-4 text-white">
-                    What Does TinyCompression Do?
-                </h2>
-                <p className="mb-4">
-                    TinyCompression is a fast, secure, privacy-friendly file compressor that helps you
-                    reduce the size of MP4 videos, PNGs, and JPG images instantly. Whether you're
-                    sharing videos on social media, uploading to email, or saving device storage —
-                    our tool keeps quality high while keeping file sizes low.
-                </p>
-                <p className="mb-4">
-                    We use advanced FFmpeg optimization under the hood. This ensures your files are
-                    compressed efficiently without noticeable quality loss. You stay in control with
-                    adjustable quality settings (CRF for videos, quality percentage for images).
-                </p>
-                <p className="mb-4">
-                    Your files are processed securely and deleted automatically. Nothing is stored on our
-                    servers — your privacy is always protected.
-                </p>
+            <section className="px-6 md:px-24 lg:px-40 py-12 text-center text-slate-300 space-y-8">
 
-                <h3 className="text-xl font-semibold mt-8 mb-3 text-white">
-                    How to Use the Compressor
-                </h3>
-                <ul className="text-left max-w-2xl mx-auto list-disc list-inside space-y-2">
-                    <li>Upload your video or image file (MP4, PNG, JPG supported).</li>
-                    <li>Choose the compression quality you prefer.</li>
-                    <li>Wait for processing — usually only a few seconds.</li>
-                    <li>Download your optimized file instantly.</li>
-                </ul>
+                <div className="space-y-3">
+                    <h2 className="text-2xl font-semibold text-white">What is TinyCompression?</h2>
+                    <p>
+                        TinyCompression helps you shrink MP4 videos, PNGs, and JPG images quickly while keeping
+                        great quality. Everything is processed securely and never stored.
+                    </p>
+                </div>
 
-                <h3 className="text-xl font-semibold mt-8 mb-3 text-white">
-                    Why Use File Compression?
-                </h3>
-                <p className="mb-4">
-                    Compressed files load faster, upload quicker, and take less storage space. This is
-                    especially useful for WhatsApp sharing, YouTube uploads, Instagram Reels, websites,
-                    and email attachments that have strict size limits.
-                </p>
-                <p>
-                    TinyCompression makes this process simple, fast, and accessible to everyone — no
-                    software installation needed.
-                </p>
+                <div className="space-y-3">
+                    <h3 className="text-xl font-semibold text-white">How It Works</h3>
+                    <p>Upload → pick quality → compress → download. Simple, fast, private.</p>
+                    <ul className="text-left max-w-xl mx-auto list-disc list-inside space-y-1">
+                        <li>Supports MP4, PNG, JPG formats</li>
+                        <li>Choose your quality level</li>
+                        <li>Fast compression powered by FFmpeg</li>
+                    </ul>
+                </div>
+
+                <div className="space-y-3">
+                    <h3 className="text-xl font-semibold text-white">Why Compress Files?</h3>
+                    <p>
+                        Smaller files upload faster, take less storage, and are easier to share on WhatsApp,
+                        Instagram, YouTube, and email.
+                    </p>
+                </div>
             </section>
             <section id="upload" className="flex justify-center py-12">
                 <UploadCard />
