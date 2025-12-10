@@ -6,36 +6,38 @@ import FAQ from "../components/FAQ";
 export default function Home() {
     return (
         <div className="min-h-screen bg-slate-900 text-white">
-            <section className="px-6 md:px-24 lg:px-40 py-12 text-center text-slate-300 space-y-8">
-
-                <div className="space-y-3">
-                    <h2 className="text-2xl font-semibold text-white">What is TinyCompression?</h2>
-                    <p>
-                        TinyCompression helps you shrink MP4 videos, PNGs, and JPG images quickly while keeping
-                        great quality. Everything is processed securely and never stored.
-                    </p>
-                </div>
-
-                <div className="space-y-3">
-                    <h3 className="text-xl font-semibold text-white">How It Works</h3>
-                    <p>Upload → pick quality → compress → download. Simple, fast, private.</p>
-                    <ul className="text-left max-w-xl mx-auto list-disc list-inside space-y-1">
-                        <li>Supports MP4, PNG, JPG formats</li>
-                        <li>Choose your quality level</li>
-                        <li>Fast compression powered by FFmpeg</li>
-                    </ul>
-                </div>
-
-                <div className="space-y-3">
-                    <h3 className="text-xl font-semibold text-white">Why Compress Files?</h3>
-                    <p>
-                        Smaller files upload faster, take less storage, and are easier to share on WhatsApp,
-                        Instagram, YouTube, and email.
-                    </p>
-                </div>
-            </section>
             <section id="upload" className="flex justify-center py-12">
                 <UploadCard />
+            </section>
+            <section className="px-6 md:px-12 lg:px-32 py-10 space-y-8">
+                <div className="bg-slate-800/60 border border-slate-700 p-8 rounded-2xl text-center space-y-3">
+                    <h2 className="text-2xl font-bold">Welcome to TinyCompression 🚀</h2>
+                    <p className="text-slate-300 text-sm max-w-2xl mx-auto">
+                        Compress your videos and images instantly. Fast, private, and secure —
+                        your files are never stored. Just upload, compress, and download.
+                    </p>
+                </div>
+                <div className="grid gap-6 md:grid-cols-3">
+                    <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-xl space-y-3">
+                        <h3 className="text-lg font-semibold">⚡ Fast Compression</h3>
+                        <p className="text-slate-400 text-sm">
+                            Get smaller MP4, PNG, and JPG files in seconds using optimized compression.
+                        </p>
+                    </div>
+                    <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-xl space-y-3">
+                        <h3 className="text-lg font-semibold">🔒 Private & Secure</h3>
+                        <p className="text-slate-400 text-sm">
+                            Files are processed temporarily and deleted automatically. Nothing is stored.
+                        </p>
+                    </div>
+                    <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-xl space-y-3">
+                        <h3 className="text-lg font-semibold">🛠 Custom Quality</h3>
+                        <p className="text-slate-400 text-sm">
+                            Choose CRF for videos or quality level for images to control the file size.
+                        </p>
+                    </div>
+
+                </div>
             </section>
             <Pricing />
             <FAQ />
