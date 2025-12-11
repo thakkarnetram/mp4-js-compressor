@@ -7,6 +7,6 @@ import { optionalAuth } from "../middleware/auth.js";
 const router = express.Router();
 const upload = multer({ dest: '/tmp', limits: { fileSize: 1024 * 1024 * 1024 } });
 
-router.post("/compress/image", optionalAuth, upload.single("image"), enforceAnonLimit, compressImageController);
+router.post("/compress/image", optionalAuth, upload.single("image"), compressImageController);
 
 export { router as compressRouterImage };

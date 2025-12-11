@@ -166,13 +166,13 @@ export default function ImageUploadCard() {
                             max="100"
                             value={quality}
                             onChange={(e) => setQuality(Number(e.target.value))}
-                            style={{ width: "100%", marginTop: 8 }}
+                            style={{ width: "100%", marginTop: 8, padding: "10px 12px" }}
                         />
-                        <small className="text-slate-400">Lower = smaller file</small>
+                        <small className="text-slate-200" style={{ fontSize: "14px" }}>Lower = smaller file</small>
                     </div>
 
                     <div style={{ marginTop: 16 }}>
-                        <button onClick={handleCompress} disabled={loading}>
+                        <button onClick={handleCompress} disabled={loading} style={{ flex: 1, padding: "12px 14px", borderRadius: 10, background: "#2563eb", color: "#fff", fontWeight: 700 }}>
                             {loading ? `Compressing ${progress}%` : "Compress Image"}
                         </button>
                     </div>
@@ -182,7 +182,7 @@ export default function ImageUploadCard() {
                             <img src={resultUrl} alt="result" style={{ maxWidth: "100%", borderRadius: 8 }} />
                             <div style={{ marginTop: 8 }}>
                                 <a href={resultUrl} download={`compressed-${file.name}`}>
-                                    <button>⬇️ Download Compressed Image</button>
+                                    <button style={{ flex: 1, padding: "10px 12px", borderRadius: 10, background: "#2563eb", color: "#fff", fontWeight: 700 }}>⬇️ Download Compressed Image</button>
                                 </a>
                             </div>
                         </div>
