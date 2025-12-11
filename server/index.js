@@ -13,6 +13,7 @@ connectDatabase();
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 
 const app = express();
+app.set('trust proxy', 1);
 app.use(cookieParser());
 const allowedOrigins = [
   "https://tinycompression.netlify.app",

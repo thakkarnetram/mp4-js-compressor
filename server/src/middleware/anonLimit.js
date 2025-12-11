@@ -16,6 +16,9 @@ export async function enforceAnonLimit(req, res, next) {
         const isLocal = req.hostname === "localhost" || req.hostname === "127.0.0.1";
         let anonId = req.cookies?.[cookieName];
         if (!anonId) {
+            let ip =  req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown-ip';
+            if (ip.includes(',')) ip = ip.split(',')[0].trim();
+            anonId = `ip=${ip}`
             anonId = uuidv4();
             res.cookie(cookieName, anonId, {
                 httpOnly: true,
