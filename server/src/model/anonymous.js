@@ -18,7 +18,11 @@ const AnonymouseSchema = new mongoose.Schema({
     lastSeen: {
         type: Date,
         default: Date.now
-    }
+    },
+    bytes: {
+        type: Number,
+        default: 0
+    },
 })
 
 AnonymouseSchema.index({ anonId: 1, dateStr: 1 }, { unique: true });

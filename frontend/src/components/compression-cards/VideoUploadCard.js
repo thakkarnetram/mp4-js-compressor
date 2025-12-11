@@ -13,8 +13,21 @@ export default function VideoUploadCard() {
   const [crf, setCrf] = useState(24);
   const [msg, setMsg] = useState("");
   const uploadingRef = useRef(false);
+  const MAX_FILE_SIZE_ANON_MB = 25;
+  const MAX_FILE_SIZE_STANDARD_MB = 100;
+  const MAX_FILE_SIZE_PRO_MB = 250;
+  const MB_TO_BYTES = 1024 * 1024;
+  const maxFileSize = isPro
+    ? MAX_FILE_SIZE_PRO_MB * MB_TO_BYTES
+    : isLoggedIn
+      ? MAX_FILE_SIZE_STANDARD_MB * MB_TO_BYTES
+      : MAX_FILE_SIZE_ANON_MB * MB_TO_BYTES;
 
-
+  const maxFileSizeMB = isPro
+    ? MAX_FILE_SIZE_PRO_MB
+    : isLoggedIn
+      ? MAX_FILE_SIZE_STANDARD_MB
+      : MAX_FILE_SIZE_ANON_MB;
   const activeIntervals = useRef({});
 
   const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8082";
@@ -46,9 +59,16 @@ export default function VideoUploadCard() {
     setItems((p) => [...p, ...wrapFiles(mp4s)]);
   }, []);
 
-  const onDropRejected = useCallback(() => {
-    setMsg("Some files were rejected — only MP4 allowed.");
-  }, []);
+  const onDropRejected = useCallback((fileRejections) => {
+    const sizeRejected = fileRejections.some(r =>
+      r.errors.some(e => e.code === 'file-too-large')
+    );
+    if (sizeRejected) {
+      setMsg(`Some files were rejected. Max file size is ${maxFileSizeMB} MB for your plan.`);
+    } else {
+      setMsg("Some files were rejected — only MP4 allowed.");
+    }
+  }, [maxFileSizeMB]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDropAccepted,
@@ -56,6 +76,7 @@ export default function VideoUploadCard() {
     accept: { "video/mp4": [".mp4"] },
     multiple: true,
     maxFiles: 30,
+    maxSize: maxFileSize
   });
 
   const removeItem = (id) => {
@@ -98,7 +119,7 @@ export default function VideoUploadCard() {
         clearInterval(intervalId);
         if (onError) onError(err.message);
       }
-    }, 3000); 
+    }, 3000);
 
     activeIntervals.current[itemId || jobId] = intervalId;
   };
@@ -176,7 +197,7 @@ export default function VideoUploadCard() {
     } catch (err) {
       if (err.response && err.response.status === 403) {
         const parsed = await parseErrorBody(err.response.data);
-        if (parsed?.code === "ANON_LIMIT_EXCEEDED") {
+        if (parsed?.code === "ANON_LIMIT_EXCEEDED" || parsed?.code === "QUOTA_EXCEEDED") {
           setItems((prev) => prev.map((x) => (x.id === it.id ? { ...x, status: "blocked" } : x)));
           return { ok: false, code: "ANON_LIMIT_EXCEEDED", message: parsed.message };
         }
@@ -277,6 +298,15 @@ export default function VideoUploadCard() {
     } catch (err) {
       console.error("Batch error", err);
       uploadingRef.current = false;
+      if (err.response && err.response.status === 403) {
+        const parsed = await parseErrorBody(err.response.data);
+        const code = parsed?.code;
+        if (code === "LIMIT_EXCEEDED" || code === "QUOTA_EXCEEDED" || code === "FILE_TOO_LARGE") {
+          setMsg(parsed.message || "Upload limit exceeded.");
+          setItems((prev) => prev.map((it) => ({ ...it, status: "blocked" })));
+          return;
+        }
+      }
       setMsg("Batch upload failed.");
       setItems((prev) => prev.map((it) => ({ ...it, status: "error" })));
     }

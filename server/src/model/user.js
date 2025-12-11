@@ -9,10 +9,10 @@ const PaymentSchema = new mongoose.Schema({
         type: String,
         default: "razorpay"
     },
-    createdAt: { 
-        type: Date, 
+    createdAt: {
+        type: Date,
         default: Date.now
-     },
+    },
 });
 
 const UserSchema = new mongoose.Schema({
@@ -29,6 +29,10 @@ const UserSchema = new mongoose.Schema({
     },
     planExpiresAt: Date,
     payments: [PaymentSchema],
+    dailyUsage: {
+        date: String,
+        bytes: { type: Number, default: 0 }
+    }
 })
 
 const User = mongoose.model("user", UserSchema)
