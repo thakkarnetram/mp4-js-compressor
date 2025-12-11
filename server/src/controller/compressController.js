@@ -70,28 +70,31 @@ const checkAndIncrementQuota = async (req, incomingBytes, dbUser) => {
     }
 
     else {
-        const limit = getQuotaLimit(null);
+        const limit = QUOTA_ANON;
         const cookieName = process.env.ANON_COOKIE_NAME || "anonId";
         const anonId = req.cookies?.[cookieName] || req.anonUsage?.anonId;
 
-        if (!anonId) return { allowed: true };
-
-        let entry = await AnonUsage.findOne({ anonId, dateStr: todayStr });
-        if (!entry) {
-            entry = new AnonUsage({ anonId, dateStr: todayStr, bytes: 0 });
+        if (!anonId) {
+            console.error("❌ Quota Check Failed: No Anon ID found. Middleware might be missing.");
+            return { allowed: false, message: "Session error. Please refresh page." };
         }
 
-        const currentUsed = entry.bytes || 0;
+        const entry = await AnonUsage.findOneAndUpdate(
+            { anonId, dateStr: todayStr },
+            { $inc: { bytes: incomingBytes }, $setOnInsert: { count: 0, lastSeen: new Date() } },
+            { new: true, upsert: true }
+        );
 
-        if (currentUsed + incomingBytes > limit) {
+        if (entry.bytes > limit) {
+            await AnonUsage.findOneAndUpdate(
+                { anonId, dateStr: todayStr },
+                { $inc: { bytes: -incomingBytes } }
+            );
             return {
                 allowed: false,
-                message: `Anonymous daily quota exceeded. Used: ${(currentUsed / 1024 / 1024).toFixed(1)}MB. Limit: ${limit / 1024 / 1024}MB.`
+                message: `Anonymous daily quota exceeded. Used: ${((entry.bytes - incomingBytes) / 1024 / 1024).toFixed(1)}MB. Limit: 25MB.`
             };
         }
-
-        entry.bytes = currentUsed + incomingBytes;
-        await entry.save();
         return { allowed: true };
     }
 };
