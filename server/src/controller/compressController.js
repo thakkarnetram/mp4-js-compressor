@@ -70,6 +70,7 @@ const checkAndIncrementQuota = async (req, incomingBytes, dbUser) => {
     }
 
     else {
+        const limit = getQuotaLimit(null);
         const cookieName = process.env.ANON_COOKIE_NAME || "anonId";
         const anonId = req.cookies?.[cookieName] || req.anonUsage?.anonId;
 
