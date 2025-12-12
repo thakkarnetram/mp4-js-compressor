@@ -44,7 +44,8 @@ export const compressVideo = (inputPath, outputPath, crf) => {
                 "-preset veryfast",
                 `-crf ${crf}`,
                 "-movflags +faststart",
-                "-threads 1"
+                "-threads 1",
+                "-vf scale=-2:720"
             ])
             .on("end", () => {
                 console.log("✅ Compression successful:", outputPath);
