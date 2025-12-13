@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 export default function Pricing() {
     const { user, token, setUserOnly } = useAuth();
 
-    const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8082";
+    const API_BASE = process.env.REACT_APP_API_URL_SINGLE || "http://localhost:8082";
     const RAZORPAY_KEY = process.env.REACT_APP_RAZOR_PAY_KEY;
     const isProd = true;
     const plans = [

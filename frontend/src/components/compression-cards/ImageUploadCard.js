@@ -10,7 +10,7 @@ export default function ImageUploadCard() {
     const [progress, setProgress] = useState(0);
     const [quality, setQuality] = useState(80);
     const [validationMsg, setValidationMsg] = useState("");
-    const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8082";
+    const API_BASE = process.env.REACT_APP_API_URL_SINGLE || "http://localhost:8082";
     const onDropAccepted = useCallback((acceptedFiles) => {
         setValidationMsg("");
         const f = acceptedFiles[0];
