@@ -30,7 +30,7 @@ export default function VideoUploadCard() {
       : MAX_FILE_SIZE_ANON_MB;
   const activeIntervals = useRef({});
 
-  const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8082";
+  // const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8082";
   const envServers = process.env.REACT_APP_API_URL;
   const API_SERVERS = envServers ? envServers.split(",").map(url => url.trim()) : ["http://localhost:8082"]
 
