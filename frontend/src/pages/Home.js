@@ -2,6 +2,7 @@ import React from "react";
 import Pricing from "../components/Pricing";
 import UploadCard from "./UploadTabs";
 import FAQ from "../components/FAQ";
+import { Link } from "react-router-dom";
 
 export default function Home() {
     return (
@@ -43,6 +44,8 @@ export default function Home() {
             <FAQ />
             <footer className="text-center text-slate-500 py-6 border-t border-slate-800">
                 © {new Date().getFullYear()} TinyCompression. All rights reserved.
+                <br />
+                <Link to="/privacy" className="hover:text-blue-400 transition-colors">Privacy Policy</Link>
             </footer>
         </div>
     );

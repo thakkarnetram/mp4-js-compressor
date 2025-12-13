@@ -6,6 +6,7 @@ import UploadPage from "./pages/UploadTabs";
 import Pricing from "./components/Pricing";
 import FAQ from "./components/FAQ";
 import AuthPage from "./pages/AuthPage";
+import PrivacyPolicy from "./pages/Policy";
 import Profile from "./pages/Profile";
 import { useAuth } from "./context/AuthContext";
 
@@ -27,6 +28,7 @@ export default function App() {
                     <Route path="/pricing" element={<Pricing />} />
                     <Route path="/faq" element={<FAQ />} />
                     <Route path="/auth" element={<AuthPage />} />
+                    <Route path="/privacy" element={<PrivacyPolicy />} />
                     <Route
                         path="/profile"
                         element={
