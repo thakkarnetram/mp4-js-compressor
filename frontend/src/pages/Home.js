@@ -7,7 +7,15 @@ import { Link } from "react-router-dom";
 export default function Home() {
     return (
         <div className="min-h-screen bg-slate-900 text-white overflow-auto">
-            <section id="upload" className="flex justify-center py-12">
+            <section
+                id="upload"
+                className="flex flex-col items-center justify-center py-12 gap-3"
+            >
+                <p className="text-slate-400 text-xs md:text-sm text-center max-w-xl">
+                    ⏳ Compression may take a little longer at times.
+                    <br />
+                    Your file is processed securely and accurately.
+                </p>
                 <UploadCard />
             </section>
             <section className="px-6 md:px-12 lg:px-32 py-10 space-y-8">

@@ -36,7 +36,11 @@ export default function SeoPage({ heading, intro, title, description }) {
                     <p className="text-slate-300 text-center text-sm md:text-base max-w-2xl mx-auto mb-6">
                         {intro}
                     </p>
-
+                    <p className="text-slate-400 text-xs md:text-sm text-center max-w-xl mx-auto leading-relaxed mb-4">
+                        ⏳ Compression may take a little longer at times.
+                        <br />
+                        Your file is processed securely and accurately.
+                    </p>
                     <UploadCard />
                 </div>
             </section>
