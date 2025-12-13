@@ -17,6 +17,7 @@ app.set('trust proxy', 1);
 app.use(cookieParser());
 const allowedOrigins = [
   "https://tinycompression.netlify.app",
+  "https://tinycompression.online",
   "http://localhost:3000",
 ];
 
