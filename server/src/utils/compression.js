@@ -48,7 +48,7 @@ export const compressVideo = (inputPath, outputPath, crf) => {
                 "-vf scale=-2:720"
             ])
             .on("end", () => {
-                console.log(`✅ Compression successful: ${new Date().toLocaleString()}`, outputPath);
+                console.log(`✅ Compression successful: ${new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })}`, outputPath);
                 resolve();
             })
             .on("error", (err, stdout, stderr) => {
@@ -66,7 +66,7 @@ export const compressImage = async (input, output, quality = 80) => {
         await sharp(input)
             .jpeg({ quality })
             .toFile(output);
-        console.log(`✅ Compressed image saved: ${output}`);
+        console.log(`✅ Compression successful: ${new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })}`, output);
     } catch (err) {
         console.error("❌ Image compression failed:", err);
     }
