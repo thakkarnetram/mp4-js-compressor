@@ -48,7 +48,7 @@ export const compressVideo = (inputPath, outputPath, crf) => {
                 "-vf scale=-2:720"
             ])
             .on("end", () => {
-                console.log(`✅ Compression successful: ${new Date.toLocaleString()}`, outputPath);
+                console.log(`✅ Compression successful: ${new Date().toLocaleString()}`, outputPath);
                 resolve();
             })
             .on("error", (err, stdout, stderr) => {
