@@ -2,6 +2,9 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
+import CompressVideoFree from "./pages/seo/CompressVideoFree";
+import ReduceVideoQuality from "./pages/seo/ReduceVideoQuality";
+import CompressMp4Under25 from "./pages/seo/CompressVideoUnder25";
 import UploadPage from "./pages/UploadTabs";
 import Pricing from "./components/Pricing";
 import FAQ from "./components/FAQ";
@@ -29,6 +32,9 @@ export default function App() {
                     <Route path="/faq" element={<FAQ />} />
                     <Route path="/auth" element={<AuthPage />} />
                     <Route path="/privacy" element={<PrivacyPolicy />} />
+                    <Route path="/compress-video-online-free" element={<CompressVideoFree />} />
+                    <Route path="/reduce-video-size-without-losing-quality" element={<ReduceVideoQuality />} />
+                    <Route path="/compress-mp4-under-25mb" element={<CompressMp4Under25 />} />
                     <Route
                         path="/profile"
                         element={
