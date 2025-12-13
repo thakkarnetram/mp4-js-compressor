@@ -31,6 +31,14 @@ export default function VideoUploadCard() {
   const activeIntervals = useRef({});
 
   const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8082";
+  const envServers = process.env.REACT_APP_API_URL;
+  const API_SERVERS = envServers ? envServers.split(",").map(url => url.trim()) : ["http://localhost:8082"]
+
+  const pickServer = () => {
+    const randomIndex = Math.floor(Math.random() * API_SERVERS.length);
+    return API_SERVERS[randomIndex];
+  }
+
   useEffect(() => {
     const intervals = activeIntervals.current;
     return () => {
@@ -87,10 +95,10 @@ export default function VideoUploadCard() {
     }
   };
 
-  const pollStatus = (jobId, itemId, onSuccess, onError) => {
+  const pollStatus = (jobId, itemId, serverUrl, onSuccess, onError) => {
     const intervalId = setInterval(async () => {
       try {
-        const res = await axios.get(`${API_BASE}/api/v1/compress/video/status/${jobId}`, {
+        const res = await axios.get(`${serverUrl}/api/v1/compress/video/status/${jobId}`, {
           withCredentials: true,
           headers: authHeader,
         });
@@ -126,9 +134,9 @@ export default function VideoUploadCard() {
 
   const downloadFile = (id, filename) => {
     const it = items.find((x) => x.id === id);
-    if (!it || !it.jobId) return;
+    if (!it || !it.jobId || !it.serverUrl) return;
 
-    const downloadUrl = `${API_BASE}/api/v1/compress/video/download/${it.jobId}`;
+    const downloadUrl = `${it.serverUrl}/api/v1/compress/video/download/${it.jobId}`;
 
     const a = document.createElement("a");
     a.href = downloadUrl;
@@ -153,8 +161,9 @@ export default function VideoUploadCard() {
   }
 
   const uploadOne = async (it) => {
+    const assignedServer = pickServer();
     setItems((prev) =>
-      prev.map((x) => (x.id === it.id ? { ...x, status: "uploading", progress: 0 } : x))
+      prev.map((x) => (x.id === it.id ? { ...x, status: "uploading", progress: 0, serverUrl: assignedServer } : x))
     );
 
     const fd = new FormData();
@@ -162,7 +171,7 @@ export default function VideoUploadCard() {
     fd.append("crf", String(crf));
 
     try {
-      const res = await axios.post(`${API_BASE}/api/v1/compress/video/job`, fd, {
+      const res = await axios.post(`${assignedServer}/api/v1/compress/video/job`, fd, {
         withCredentials: true,
         headers: { ...authHeader },
         onUploadProgress: (e) => {
@@ -183,6 +192,7 @@ export default function VideoUploadCard() {
         pollStatus(
           jobId,
           it.id,
+          assignedServer,
           () => {
             setItems((prev) => prev.map((x) => (x.id === it.id ? { ...x, status: "done", progress: 100 } : x)));
             resolve({ ok: true });
@@ -249,7 +259,7 @@ export default function VideoUploadCard() {
 
     uploadingRef.current = true;
     setMsg("Uploading batch...");
-
+    const assignedServer = pickServer();
     setItems((prev) => prev.map((it) => ({ ...it, status: "uploading", progress: 0 })));
 
     const fd = new FormData();
@@ -257,7 +267,7 @@ export default function VideoUploadCard() {
     fd.append("crf", String(crf));
 
     try {
-      const res = await axios.post(`${API_BASE}/api/v1/compress/video/job`, fd, {
+      const res = await axios.post(`${assignedServer}/api/v1/compress/video/job`, fd, {
         withCredentials: true,
         headers: { ...authHeader },
         onUploadProgress: (e) => {
@@ -275,12 +285,13 @@ export default function VideoUploadCard() {
       pollStatus(
         jobId,
         null,
+        assignedServer,
         () => {
 
           uploadingRef.current = false;
           setItems((prev) => prev.map((it) => ({ ...it, status: "done", progress: 100 })));
           setMsg("Batch Done! Downloading ZIP...");
-          const downloadUrl = `${API_BASE}/api/v1/compress/video/download/${jobId}`;
+          const downloadUrl = `${assignedServer}/api/v1/compress/video/download/${jobId}`;
           const a = document.createElement("a");
           a.href = downloadUrl;
           a.download = `compressed-batch-${Date.now()}.zip`;
