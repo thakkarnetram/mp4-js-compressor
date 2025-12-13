@@ -7,7 +7,7 @@ import { Link, useLocation } from "react-router-dom";
 
 export default function SeoPage({ heading, intro, title, description }) {
     const location = useLocation();
-    const canonicalUrl = `https://tinycompression.netlify.app${location.pathname}`;
+    const canonicalUrl = `https://tinycompression.online${location.pathname}`;
 
     return (
         <div className="min-h-screen bg-slate-900 text-white overflow-auto">
