@@ -20,9 +20,9 @@ export default function Home() {
             </section>
             <section className="px-6 md:px-12 lg:px-32 py-10 space-y-8">
                 <div className="bg-slate-800/60 border border-slate-700 p-8 rounded-2xl text-center space-y-3">
-                    <h2 className="text-2xl font-bold">Welcome to TinyCompression 🚀</h2>
+                    <h2 className="text-2xl font-bold">Welcome to TinyCompression </h2>
                     <p className="text-slate-300 text-sm max-w-2xl mx-auto">
-                        Compress your videos and images instantly. Reliable, private, and secure —
+                        Compress your videos and images instantly. Reliable, private, and secure
                         your files are never stored. Just upload, compress, and download.
                     </p>
                 </div>
