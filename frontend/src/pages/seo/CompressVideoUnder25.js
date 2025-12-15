@@ -6,7 +6,7 @@ export default function CompressMp4Under25() {
             heading="Compress MP4 Under 25MB"
             intro="Compress MP4 videos under 25MB online instantly. Ideal for email, forms, and uploads."
             title="Compress MP4 Under 25MB – TinyCompression"
-            description="Compress MP4 under 25MB for free using TinyCompression. No signup, fast compression, and secure processing."
+            description="Compress MP4 under 25MB for free using TinyCompression. No signup, Reliable compression, and secure processing."
         />
     );
 }

@@ -204,7 +204,7 @@ export default function Pricing() {
                             <p className="text-xl mb-6">{plan.price}</p>
                             <ul className="space-y-2 text-sm text-slate-300 mb-8">
                                 {plan.features.map((f, j) => (
-                                    <li key={j}>✅ {f}</li>
+                                    <li key={j}> {f}</li>
                                 ))}
                             </ul>
 

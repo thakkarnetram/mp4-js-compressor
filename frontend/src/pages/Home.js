@@ -22,25 +22,25 @@ export default function Home() {
                 <div className="bg-slate-800/60 border border-slate-700 p-8 rounded-2xl text-center space-y-3">
                     <h2 className="text-2xl font-bold">Welcome to TinyCompression 🚀</h2>
                     <p className="text-slate-300 text-sm max-w-2xl mx-auto">
-                        Compress your videos and images instantly. Fast, private, and secure —
+                        Compress your videos and images instantly. Reliable, private, and secure —
                         your files are never stored. Just upload, compress, and download.
                     </p>
                 </div>
                 <div className="grid gap-6 md:grid-cols-3">
                     <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-xl space-y-3">
-                        <h3 className="text-lg font-semibold">⚡ Fast Compression</h3>
+                        <h3 className="text-lg font-semibold"> Reliable Compression</h3>
                         <p className="text-slate-400 text-sm">
                             Get smaller MP4, PNG, and JPG files in seconds using optimized compression.
                         </p>
                     </div>
                     <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-xl space-y-3">
-                        <h3 className="text-lg font-semibold">🔒 Private & Secure</h3>
+                        <h3 className="text-lg font-semibold"> Private & Secure</h3>
                         <p className="text-slate-400 text-sm">
                             Files are processed temporarily and deleted automatically. Nothing is stored.
                         </p>
                     </div>
                     <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-xl space-y-3">
-                        <h3 className="text-lg font-semibold">🛠 Custom Quality</h3>
+                        <h3 className="text-lg font-semibold"> Custom Quality</h3>
                         <p className="text-slate-400 text-sm">
                             Choose CRF for videos or quality level for images to control the file size.
                         </p>

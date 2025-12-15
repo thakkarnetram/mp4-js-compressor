@@ -4,7 +4,7 @@ export default function FAQ() {
     const faqs = [
         {
             q: "Is TinyCompression free to use?",
-            a: "Yes! You can compress individual videos and images for free. A Pro version will offer bulk compression and faster speeds."
+            a: "Yes! You can compress individual videos and images for free. A Pro version will offer bulk compression and reliable speeds."
         },
         {
             q: "What file types are supported?",

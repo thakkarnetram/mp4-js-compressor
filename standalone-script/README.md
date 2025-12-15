@@ -1,7 +1,7 @@
 # 🎬 MP4 Bulk Compressor
 
 A  Node.js tool to **compress bulk MP4 files locally** with decent quality and reduced size — 
-faster and more private than online sites.
+reliable and more private than online sites.
 
 ---
 
