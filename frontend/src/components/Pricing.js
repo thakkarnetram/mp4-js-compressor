@@ -18,8 +18,8 @@ export default function Pricing() {
         {
             id: "Pro",
             title: "Pro",
-            price: "₹299 / month",
-            amount: 299,
+            price: "₹199 / month",
+            amount: 199,
             features: ["250 MB / Day", "Sequential file upload", "Bulk compression with zip", "Custom CRF settings"],
             highlight: true,
         },
